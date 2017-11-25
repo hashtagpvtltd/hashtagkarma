@@ -63,7 +63,7 @@ class Action extends Component {
 	render(){
 		var placeholder = null;
 		if(this.props.id === 0){
-			placeholder = 'format: [score] [action]'
+			placeholder = 'format: [karma] [action]'
 		}
 		if(this.props.id === 1){
 			if(this.props.type === 'GOOD'){
