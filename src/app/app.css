@@ -1,0 +1,138 @@
+/* Layout & General Stuff */
+body {
+  margin: 0;
+  padding: 0;
+}
+div{
+  display: flex;
+  width: 100%;
+}
+#root{
+  background: #191919;
+  min-height: 100vh;
+  justify-content: center;
+  flex: 1;
+}
+.pseudo-root{
+  justify-content: center;
+}
+
+@media only screen and (max-width: 576px) {
+    .container{
+        width: 100%;
+        padding: 0px 12px;
+    }
+}
+.container{
+  width: 576px;
+  flex-flow: column wrap;
+}
+.pseudo-container{
+  width: 100%;
+  flex-flow: column wrap;
+}
+.right-align{
+  justify-content: flex-end;
+}
+
+
+/* Typography */
+#root, #root input, #root textarea{
+  font-family: 'Nunito', sans-serif;
+  color: white;
+  font-size: 14px;
+}
+.font-x-large{
+  font-size: 24px;
+}
+.font-large{
+  font-size: 18px;
+}
+.font-medium{
+  font-size: 16px;
+}
+.font-text{
+
+}
+.color-grey{
+  color: #C3C3C3;
+}
+.font-error{
+  font-size: 13px;
+  color: #C3C3C3;
+}
+.font-bold{
+  font-weight: 700;
+}
+.font-selected, .color-green{
+  color: #69BF40;
+}
+.color-red{
+  color: #F64680;
+}
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+    color: white;
+    text-decoration: none;
+    font-weight: normal;
+}
+a:hover{
+  text-decoration: underline;
+}
+.btn, .soft-btn:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+.soft-btn{
+  color: white;
+}
+
+
+/* Colors */
+.bg-green{
+  background: #69BF40;
+}
+.bg-red{
+  background: #F64680;
+}
+
+
+
+/* Header */
+.header{
+  padding: 20px 0px 10px 0px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+/* Body */
+.body{
+  flex-flow: column wrap;
+}
+.body-heading{
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.actions{
+  flex-flow: column wrap;
+}
+.good .actions-list{
+  border-right: 1px solid #353535;
+}
+.actions-list{
+  flex-flow: column wrap;
+}
+.actions .heading{
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.actions-list .action{
+  margin-bottom: 10px;
+  border-bottom: 1px solid #353535;
+  height: 30px;
+  padding-left: 5px;
+}

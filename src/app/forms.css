@@ -1,0 +1,28 @@
+/* Text Input */
+input[type="text"].form, input[type="number"].form{
+    background: transparent;
+    border: 0px;
+    width: 100%;
+    font-size: 16px !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+/* Textarea */
+textarea.form{
+    background: transparent;
+    border: 0px;
+    resize: none;
+    font-size: 16px !important;
+    width: 100%;
+}
+
+/* removes blue focus from everything */
+*:focus {
+    outline: none;
+}
