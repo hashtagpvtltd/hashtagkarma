@@ -5,7 +5,8 @@ CREATE OR REPLACE FUNCTION updateAction(
   karma integer,
   dateIn date,
   updateActionId integer,
-  OUT actionId integer)
+  OUT actionId integer,
+  OUT totalKarma integer)
 AS $$
 DECLARE
   hashtagFK integer;
@@ -15,5 +16,6 @@ BEGIN
     insert into action ("actor", "hashtag", "isGood", "karma", "recordedForDate")
     values (actor, hashtagFk, isGood, karma, dateIn) returning "id" into actionId;
   end if;
+  select total into totalKarma from getKarma(actor);
 END; $$
 LANGUAGE plpgsql;
