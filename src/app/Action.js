@@ -13,6 +13,19 @@ class Action extends Component {
 		return !isNaN(num);
 	}
 
+	isGood = () => {
+		if(this.props.type === 'GOOD'){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	isAlphaNumeric = (text) => {
+		return text.match(/^[a-z0-9]+$/i);
+	}
+
 	handleInput = (event) => {
 
 		let text = event.target.value;
@@ -48,6 +61,13 @@ class Action extends Component {
 				if(!inputArray[1] && !this.state.text.includes('#')){
 					text += '#';
 				}
+
+				if(inputArray[1].length>1){
+					var hashlessTag = inputArray[1].replace(/^#/, '');
+					if(!this.isAlphaNumeric(hashlessTag)){
+						isValid = false;
+					}
+				}
 			}
 			else if(inputArray.length > 2){
 				isValid = false;
@@ -57,6 +77,14 @@ class Action extends Component {
 			this.setState({
 				text: text
 			});
+		}
+	}
+
+	handleKeyPress = (event) => {
+		if(event.keyCode === 13){ // i.e. Enter
+			let karma = parseInt( this.state.text.split(' ')[0].slice(1), 10);
+			let hashtag = this.state.text.split(' ')[1].slice(1)
+			this.props.updateAction(hashtag, this.isGood(), karma);
 		}
 	}
 
@@ -81,6 +109,7 @@ class Action extends Component {
 					placeholder={placeholder}
 					value={this.state.text}
 					onChange={this.handleInput}
+					onKeyDown={this.handleKeyPress}
 				/>
 			</div>
 		);

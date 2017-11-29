@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import './app.css';
 import './forms.css';
 import Action from './Action';
+import { updateKarma } from './actions';
 
 
 export function itemsFetchData(url) {
@@ -15,13 +16,28 @@ class App extends Component {
   render() {
     var goodActionsComp = [];
     var badActionsComp = [];
-    var karma = 40;
     for(var action of this.props.actions){
       if(action.type === 'GOOD'){
-        goodActionsComp.push( <Action text={action.text} key={action.key} id={action.id} type='GOOD' /> )
+        goodActionsComp.push( 
+          <Action 
+            text={action.text} 
+            key={action.key} 
+            id={action.id} 
+            type='GOOD' 
+            updateAction = {this.props.updateAction}
+          /> 
+        );
       }
       else if(action.type === 'BAD'){
-        badActionsComp.push( <Action text={action.text} key={action.key} id={action.id} type='BAD' /> )
+        badActionsComp.push( 
+          <Action 
+            text={action.text} 
+            key={action.key} 
+            id={action.id} 
+            type='BAD' 
+            updateAction = {this.props.updateAction}
+          /> 
+        );
       }
     }
 
@@ -30,12 +46,12 @@ class App extends Component {
         <div className="pseudo-container">
 
           <div className="header font-x-large font-bold">
-            <span className="color-green">{karma}</span>
+            <span className="color-green">{this.props.karma}</span>
           </div>
 
           <div className="body">
             <div className="body-heading font-large">
-              25th Nov
+              {this.props.date}
             </div>
             <div className="body-container">
               <div className="good actions">
@@ -45,7 +61,7 @@ class App extends Component {
                 </div>
               </div>
               <div className="bad actions">
-                <div class="heading font-medium">Bad</div>
+                <div className="heading font-medium">Bad</div>
                 <div className="actions-list">
                   {badActionsComp}
                 </div>
@@ -62,35 +78,43 @@ class App extends Component {
 const mapStateToProps = (state) => {
     return {
         title: state.hello,
-        actions: state.actions
+        actions: state.actions,
+        date: state.date,
+        karma: state.karma
     };
 };
 
 function sayHello(title) {
-  console.log(title);
-    return {
-        type: 'HELLO',
-        title: title
-    };
+  return {
+      type: 'HELLO',
+      title: title
+  };
 }
 
 function cool(url) {
-    return (dispatch) => {
+  return (dispatch) => {
 
-        fetch(url)
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-                dispatch(sayHello('#karma'));
-                return response;
-            });
-    };
+      fetch(url)
+          .then((response) => {
+              if (!response.ok) {
+                  throw Error(response.statusText);
+              }
+              dispatch(sayHello('#karma'));
+              return response;
+          });
+  };
+}
+
+function appUpdateAction(hashtag, isGood, karma){
+  return (dispatch) => {
+    dispatch(updateKarma(karma));
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        coolio: (url) => dispatch(cool(url))
+        coolio: (url) => dispatch(cool(url)),
+        updateAction: (hashtag, isGood, karma) => dispatch( appUpdateAction(hashtag, isGood, karma) )
     };
 };
 
