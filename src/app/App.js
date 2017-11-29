@@ -15,6 +15,7 @@ class App extends Component {
   render() {
     var goodActionsComp = [];
     var badActionsComp = [];
+    var karma = 40;
     for(var action of this.props.actions){
       if(action.type === 'GOOD'){
         goodActionsComp.push( <Action text={action.text} key={action.key} id={action.id} type='GOOD' /> )
@@ -29,7 +30,7 @@ class App extends Component {
         <div className="pseudo-container">
 
           <div className="header font-x-large font-bold">
-            <span className="color-green">+196</span>
+            <span className="color-green">{karma}</span>
           </div>
 
           <div className="body">
