@@ -15,8 +15,14 @@ var schema = buildSchema(`
     karma: Int
   }
 
+  type Action{
+    isGood: Boolean!
+    hashtag: String!
+    karma: Int!
+  }
+
   type Query {
-  	test: String
+    actions(date: String!): [Action]
   }
 
   type Mutation {
@@ -24,9 +30,17 @@ var schema = buildSchema(`
   }
 `);
 
+const ACTOR = 2;
+
 var root = {
-  test: () => {
-    return 'Love';
+  actions: (data, request) => {
+    let sql = "select * from actionView where actor = "+ACTOR+" and \"recordedForDate\" = '"+data.date+"'";
+    return db.query(sql).then(function(result){
+      return result[0];
+    })
+    .catch(function(error){
+      console.log(error);
+    });
   },
   updateAction: (data, request) => {
     var sql = '';
@@ -34,7 +48,7 @@ var root = {
     if(input.id === undefined){
       input.id = 'null';
     }
-    sql = "select * from updateAction(2, '"+input.hashtag+"', '"+input.isGood+"', "+input.karma+", '"+input.date+"', "+input.id+")";
+    sql = "select * from updateAction("+ACTOR+", '"+input.hashtag+"', '"+input.isGood+"', "+input.karma+", '"+input.date+"', "+input.id+")";
     console.log(sql);
 
     return db.query(sql).then(function(result){
