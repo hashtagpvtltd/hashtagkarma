@@ -5,21 +5,32 @@ class Action extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			text: props.text
+			text: this.getInputText(props)
 		};
+	}
+
+	componentWillReceiveProps(props){
+		this.setState({
+			text: this.getInputText(props)
+		});
+	}
+
+	getInputText(props){
+		let text = '';
+		if(props.karma){
+			if(props.isGood){
+				text += '+';
+			}
+			else{
+				text += '-';
+			}
+			text += props.karma + ' #' + props.hashtag ;
+		}
+		return text;
 	}
 
 	isNumeric = (num) => {
 		return !isNaN(num);
-	}
-
-	isGood = () => {
-		if(this.props.type === 'GOOD'){
-			return true;
-		}
-		else{
-			return false;
-		}
 	}
 
 	isAlphaNumeric = (text) => {
@@ -35,7 +46,7 @@ class Action extends Component {
 		}
 		else if(text.length === 1){
 			if(this.isNumeric(text)){
-				if(this.props.type === 'GOOD'){
+				if(this.props.isGood){
 					text = '+' + text;
 				}
 				else{
@@ -84,23 +95,21 @@ class Action extends Component {
 		if(event.keyCode === 13){ // i.e. Enter
 			let karma = parseInt( this.state.text.split(' ')[0].slice(1), 10);
 			let hashtag = this.state.text.split(' ')[1].slice(1)
-			this.props.updateAction(hashtag, this.isGood(), karma);
+			this.props.updateAction(hashtag, this.props.isGood, karma);
 		}
 	}
 
 	render(){
 		var placeholder = null;
-		if(this.props.id === 0){
-			placeholder = 'format: [karma] [action]'
-		}
-		if(this.props.id === 1){
-			if(this.props.type === 'GOOD'){
-				placeholder = 'example: +50 #MedsForMom';
+		/*
+			if(this.props.isGood){
+				placeholder = '+50 #MedsForMom';
 			}
 			else{
-				placeholder = 'example: -100 #TooMuchTV';
+				placeholder = '-100 #TooMuchTV';
 			}
-		}
+		*/
+
 		return(
 			<div className="action">
 				<input

@@ -4,6 +4,10 @@ const app = express();
 const graphqlHTTP = require('express-graphql');
 const API = require('./src/app/api');
 
+// to make requests on localhost
+var cors = require('cors');
+app.use(cors())
+
 // Serves static assets
 app.use(express.static(path.join(__dirname, 'build')));
 

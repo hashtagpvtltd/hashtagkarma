@@ -19,6 +19,7 @@ var schema = buildSchema(`
     isGood: Boolean!
     hashtag: String!
     karma: Int!
+    id: Int
   }
 
   type Query {

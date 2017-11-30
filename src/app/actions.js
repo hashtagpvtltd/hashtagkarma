@@ -1,6 +1,13 @@
 export function updateKarma(karma) {
   return {
-    type: 'UPDATE',
-    karma: karma
+    type: 'KARMA_UPDATE',
+    karma
+  };
+}
+
+export function updateActions(actions) {
+  return {
+    type: 'ACTIONS_UPDATE',
+    actions
   };
 }

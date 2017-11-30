@@ -3,43 +3,41 @@ import { connect } from 'react-redux';
 import './app.css';
 import './forms.css';
 import Action from './Action';
-import { updateKarma } from './actions';
+import { updateKarma, updateActions } from './actions';
+import axios from 'axios';
 
-
-export function itemsFetchData(url) {
-    }
 
 class App extends Component {
   componentDidMount() {
-    this.props.coolio('http://5826ed963900d612000138bd.mockapi.io/items');
+    this.props.getActions('2017-11-28');
   }
   render() {
     var goodActionsComp = [];
     var badActionsComp = [];
-    for(var action of this.props.actions){
-      if(action.type === 'GOOD'){
-        goodActionsComp.push( 
-          <Action 
-            text={action.text} 
-            key={action.key} 
-            id={action.id} 
-            type='GOOD' 
-            updateAction = {this.props.updateAction}
-          /> 
-        );
-      }
-      else if(action.type === 'BAD'){
-        badActionsComp.push( 
-          <Action 
-            text={action.text} 
-            key={action.key} 
-            id={action.id} 
-            type='BAD' 
-            updateAction = {this.props.updateAction}
-          /> 
-        );
-      }
-    }
+
+    this.props.actions.good.forEach( (action, key) => {
+      let actionComp = (<Action 
+        hashtag={action.hashtag} 
+        karma={action.karma}
+        key={key}
+        id={action.id} 
+        isGood={action.isGood} 
+        updateAction = {this.props.updateAction}
+      />);
+      goodActionsComp.push(actionComp);
+    });
+
+    this.props.actions.bad.forEach( (action, key) => {
+      let actionComp = (<Action 
+        hashtag={action.hashtag} 
+        karma={action.karma}
+        key={key}
+        id={action.id} 
+        isGood={action.isGood} 
+        updateAction = {this.props.updateAction}
+      />);
+      badActionsComp.push(actionComp);
+    });
 
     return (
       <div className="container">
@@ -84,24 +82,24 @@ const mapStateToProps = (state) => {
     };
 };
 
-function sayHello(title) {
-  return {
-      type: 'HELLO',
-      title: title
-  };
-}
-
-function cool(url) {
+function appGetActions(date) {
   return (dispatch) => {
 
-      fetch(url)
-          .then((response) => {
-              if (!response.ok) {
-                  throw Error(response.statusText);
-              }
-              dispatch(sayHello('#karma'));
-              return response;
-          });
+    let data = {
+      "query": "query ($date: String!) { \n actions(date: $date) { \n id \n hashtag \n karma \n isGood \n } \n }",
+      "variables": {
+          "date": "2017-11-28"
+      }
+    };
+
+    axios.post(localStorage.getItem('apiRoot')+'/api', data)
+    .then( (response) => {
+      dispatch(updateActions(response.data.data.actions));
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
+
   };
 }
 
@@ -113,7 +111,7 @@ function appUpdateAction(hashtag, isGood, karma){
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        coolio: (url) => dispatch(cool(url)),
+        getActions: (date) => dispatch(appGetActions(date)),
         updateAction: (hashtag, isGood, karma) => dispatch( appUpdateAction(hashtag, isGood, karma) )
     };
 };

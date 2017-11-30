@@ -10,24 +10,41 @@ function hello(state = 'Redux', action) {
     }
 }
 
-var defaultActions = [];
-for(var i=0, iGood=0, iBad=0; i<14; i++){
-	if(i === 0 || i%2 === 0){
-		defaultActions.push({text: '', key: iGood, id: iGood, type:'GOOD'});
-		iGood++;
-	}
-	else{
-		defaultActions.push({text: '', key: iBad, id: iBad, type:'BAD'});
-		iBad++;
-	}
+const IDEAL_NO_OF_ACTS = 7;
+
+function getDefaultActions(actions, isGood){
+    let l = actions.length;
+    for(let i=0; i < (IDEAL_NO_OF_ACTS - l); i++){
+        actions.push({hashtag: '', karma: null, id: null, isGood: isGood});
+    }
+    return actions;
 }
 
-function actions(state = defaultActions, action) {
+function separateIntoGoodAndBad(actionsArray){
+    let actions = { good: [], bad: []};
+    for(let action of actionsArray){
+        if(action.isGood){
+            actions.good.push(action);
+        }
+        else{
+            actions.bad.push(action);
+        }
+    }
+    if(actions.good.length < IDEAL_NO_OF_ACTS){
+        actions.good = getDefaultActions(actions.good, true);
+    }
+    if(actions.bad.length < IDEAL_NO_OF_ACTS){
+        actions.bad = getDefaultActions(actions.bad, false);
+    }
+    return actions;
+}
+
+function actions(state = [], action) {
     switch (action.type) {
-        case 'EMPTY':
-          return null
+        case 'ACTIONS_UPDATE':
+            return separateIntoGoodAndBad(action.actions)
         default:
-            return state;
+            return separateIntoGoodAndBad(state);
     }
 }
 
@@ -41,7 +58,7 @@ function date(state = moment().format('Do MMM'), action) {
 
 function karma(state = '--', action) {
     switch(action.type){
-        case 'UPDATE':
+        case 'KARMA_UPDATE':
             return action.karma
         default:
             return state;
