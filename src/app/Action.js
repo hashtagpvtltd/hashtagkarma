@@ -64,7 +64,7 @@ class Action extends Component {
 		}
 		else if(text.length > 1){
 			let inputArray = text.split(' ');
-			if(this.isNumeric(inputArray[0])){
+			if(this.isNumeric(inputArray[0]) || ['+', '-'].indexOf(inputArray[0]) > -1 ){
 				isValid = true;
 			}
 
@@ -92,10 +92,16 @@ class Action extends Component {
 	}
 
 	handleKeyPress = (event) => {
-		if(event.keyCode === 13){ // i.e. Enter
+		if(event.keyCode === 13){ // i.e. Enter	
 			let karma = parseInt( this.state.text.split(' ')[0].slice(1), 10);
-			let hashtag = this.state.text.split(' ')[1].slice(1)
-			this.props.updateAction(hashtag, this.props.isGood, karma);
+			let hashtag = this.state.text.split(' ')[1].slice(1);
+			let action = {
+				hashtag: hashtag,
+				isGood: this.props.isGood,
+				karma: karma,
+				id: this.props.id
+			}
+			this.props.updateAction(action);
 		}
 	}
 

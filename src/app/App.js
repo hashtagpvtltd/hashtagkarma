@@ -110,9 +110,30 @@ function appUpdateKarma(karma){
   }
 }
 
-function appUpdateAction(hashtag, isGood, karma){
+function appUpdateAction(action){
   return (dispatch) => {
-    dispatch(updateKarma(karma));
+
+    let data = {
+      "query": "mutation updateAction($input: ActionInput) { \n updateAction(input: $input) \n { \n action karma \n  } \n }",
+      "variables": {
+          "input":{
+              "hashtag": action.hashtag,
+              "isGood": action.isGood,
+              "karma": action.karma,
+              "id": action.id,
+              "date": "2017-12-01"
+          }
+      }
+    };
+
+    axios.post(localStorage.getItem('apiRoot')+'/api', data)
+    .then( (response) => {
+      dispatch(updateKarma(response.data.data.updateAction.karma));
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
+
   }
 }
 
@@ -120,7 +141,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getActions: (date) => dispatch(appGetActions(date)),
         updateKarma: (karma) => dispatch(appUpdateKarma(karma)),
-        updateAction: (hashtag, isGood, karma) => dispatch( appUpdateAction(hashtag, isGood, karma) )
+        updateAction: (action) => dispatch( appUpdateAction(action) )
     };
 };
 
