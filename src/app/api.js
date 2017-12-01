@@ -24,6 +24,7 @@ var schema = buildSchema(`
 
   type Query {
     actions(date: String!): [Action]
+    karma: Int
   }
 
   type Mutation {
@@ -31,9 +32,19 @@ var schema = buildSchema(`
   }
 `);
 
+// temporary
 const ACTOR = 2;
 
 var root = {
+  karma: (data, request) => {
+    let sql = "select total from getKarma("+ACTOR+")";
+    return db.query(sql).then( result => {
+      return result[0][0].total
+    })
+    .catch( error => {
+      console.log(error);
+    })
+  },
   actions: (data, request) => {
     let sql = "select * from actionView where actor = "+ACTOR+" and \"recordedForDate\" = '"+data.date+"'";
     return db.query(sql).then(function(result){

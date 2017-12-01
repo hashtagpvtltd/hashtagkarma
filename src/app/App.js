@@ -86,7 +86,7 @@ function appGetActions(date) {
   return (dispatch) => {
 
     let data = {
-      "query": "query ($date: String!) { \n actions(date: $date) { \n id \n hashtag \n karma \n isGood \n } \n }",
+      "query": "query ($date: String!) { \n actions(date: $date) { \n id \n hashtag \n karma \n isGood \n }, \n karma \n }",
       "variables": {
           "date": "2017-11-28"
       }
@@ -94,6 +94,7 @@ function appGetActions(date) {
 
     axios.post(localStorage.getItem('apiRoot')+'/api', data)
     .then( (response) => {
+      dispatch(updateKarma(response.data.data.karma));
       dispatch(updateActions(response.data.data.actions));
     })
     .catch( (error) => {
@@ -101,6 +102,12 @@ function appGetActions(date) {
     });
 
   };
+}
+
+function appUpdateKarma(karma){
+  return (dispatch) => {
+    dispatch(updateKarma(karma));
+  }
 }
 
 function appUpdateAction(hashtag, isGood, karma){
@@ -112,6 +119,7 @@ function appUpdateAction(hashtag, isGood, karma){
 const mapDispatchToProps = (dispatch) => {
     return {
         getActions: (date) => dispatch(appGetActions(date)),
+        updateKarma: (karma) => dispatch(appUpdateKarma(karma)),
         updateAction: (hashtag, isGood, karma) => dispatch( appUpdateAction(hashtag, isGood, karma) )
     };
 };

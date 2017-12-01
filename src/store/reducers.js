@@ -44,7 +44,12 @@ function actions(state = [], action) {
         case 'ACTIONS_UPDATE':
             return separateIntoGoodAndBad(action.actions)
         default:
-            return separateIntoGoodAndBad(state);
+            if(state.good !== undefined && state.bad !== undefined){
+                return state;
+            }
+            else{
+                return separateIntoGoodAndBad(state);
+            }
     }
 }
 
