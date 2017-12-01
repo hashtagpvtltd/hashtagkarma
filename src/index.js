@@ -7,7 +7,7 @@ import configureStore from './store/configureStore';
 const store = configureStore();
 
 if(process.env.DEPLOYMENT === 'production'){
-
+  localStorage.setItem('apiRoot', 'http://hashtagkarma.herokuapp.com');
 }
 else{
   localStorage.setItem('apiRoot', 'http://localhost:5000');
