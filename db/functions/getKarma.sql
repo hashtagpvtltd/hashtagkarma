@@ -6,8 +6,8 @@ DECLARE
   goodKarma integer;
   badKarma integer;
 BEGIN
-  select sum("karma") into goodKarma from action where "actor" = actorId and "isGood" = true;
-  select sum("karma") into badKarma from action where "actor" = actorId and "isGood" = false;
+  select COALESCE(sum("karma"),0) into goodKarma from action where "actor" = actorId and "isGood" = true;
+  select COALESCE(sum("karma"),0) into badKarma from action where "actor" = actorId and "isGood" = false;
   total := goodKarma - badKarma;
 END; $$
 LANGUAGE plpgsql;

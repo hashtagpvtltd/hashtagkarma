@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import './app.css';
 import './forms.css';
 import Action from './Action';
-import { updateKarma, updateActions } from './actions';
+import { updateKarma, updateActions, updateAction } from './actions';
 import axios from 'axios';
 
 
 class App extends Component {
   componentDidMount() {
-    this.props.getActions('2017-11-28');
+    this.props.getActions(this.props.date.db);
   }
   render() {
     var goodActionsComp = [];
@@ -20,9 +20,11 @@ class App extends Component {
         hashtag={action.hashtag} 
         karma={action.karma}
         key={key}
+        _key={key}
         id={action.id} 
         isGood={action.isGood} 
         updateAction = {this.props.updateAction}
+        date = {this.props.date.db}
       />);
       goodActionsComp.push(actionComp);
     });
@@ -32,9 +34,11 @@ class App extends Component {
         hashtag={action.hashtag} 
         karma={action.karma}
         key={key}
+        _key={key}
         id={action.id} 
         isGood={action.isGood} 
         updateAction = {this.props.updateAction}
+        date = {this.props.date.db}
       />);
       badActionsComp.push(actionComp);
     });
@@ -49,7 +53,7 @@ class App extends Component {
 
           <div className="body">
             <div className="body-heading font-large">
-              {this.props.date}
+              {this.props.date.display}
             </div>
             <div className="body-container">
               <div className="good actions">
@@ -88,7 +92,7 @@ function appGetActions(date) {
     let data = {
       "query": "query ($date: String!) { \n actions(date: $date) { \n id \n hashtag \n karma \n isGood \n }, \n karma \n }",
       "variables": {
-          "date": "2017-11-28"
+          "date": date
       }
     };
 
@@ -121,14 +125,17 @@ function appUpdateAction(action){
               "isGood": action.isGood,
               "karma": action.karma,
               "id": action.id,
-              "date": "2017-12-01"
+              "date": action.date
           }
       }
     };
 
     axios.post(localStorage.getItem('apiRoot')+'/api', data)
     .then( (response) => {
-      dispatch(updateKarma(response.data.data.updateAction.karma));
+      let data = response.data.data.updateAction;
+      action.id = data.action;
+      dispatch(updateAction(action));
+      dispatch(updateKarma(data.karma));
     })
     .catch( (error) => {
       console.log(error);

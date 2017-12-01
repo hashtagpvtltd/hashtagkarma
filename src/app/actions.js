@@ -11,3 +11,10 @@ export function updateActions(actions) {
     actions
   };
 }
+
+export function updateAction(action) {
+  return {
+    type: 'ACTION_UPDATE',
+    action
+  }
+}

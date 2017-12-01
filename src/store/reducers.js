@@ -39,10 +39,23 @@ function separateIntoGoodAndBad(actionsArray){
     return actions;
 }
 
+function updateAction(currentState, action){
+    if(action.isGood){
+        currentState.good[action.key] = action;
+    }
+    else{
+        currentState.bad[action.key] = action;   
+    }
+    return currentState;
+}
+
+
 function actions(state = [], action) {
     switch (action.type) {
         case 'ACTIONS_UPDATE':
-            return separateIntoGoodAndBad(action.actions)
+            return separateIntoGoodAndBad(action.actions);
+        case 'ACTION_UPDATE':
+            return updateAction(state, action.action);
         default:
             if(state.good !== undefined && state.bad !== undefined){
                 return state;
@@ -53,15 +66,16 @@ function actions(state = [], action) {
     }
 }
 
+const defaultDate = { display: moment().format('Do MMM'), db: moment().format('YYYY-MM-DD') };
 
-function date(state = moment().format('Do MMM'), action) {
+function date(state = defaultDate, action) {
     switch(action.type){
         default:
             return state;
     }
 }
 
-function karma(state = '--', action) {
+function karma(state = 0, action) {
     switch(action.type){
         case 'KARMA_UPDATE':
             return action.karma

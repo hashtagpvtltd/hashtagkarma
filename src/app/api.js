@@ -33,7 +33,7 @@ var schema = buildSchema(`
 `);
 
 // temporary
-const ACTOR = 2;
+const ACTOR = 6;
 
 var root = {
   karma: (data, request) => {

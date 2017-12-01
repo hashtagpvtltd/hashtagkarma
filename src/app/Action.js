@@ -54,10 +54,10 @@ class Action extends Component {
 				}
 				isValid = true;
 			}
-			else if(text.includes('+') && this.props.type === 'GOOD'){
+			else if(text.includes('+') && this.props.isGood){
 				isValid = true;
 			}
-			else if(text.includes('-') && this.props.type === 'BAD'){
+			else if(text.includes('-') && !this.props.isGood){
 				isValid = true;
 			}
 
@@ -99,7 +99,9 @@ class Action extends Component {
 				hashtag: hashtag,
 				isGood: this.props.isGood,
 				karma: karma,
-				id: this.props.id
+				id: this.props.id,
+				key: this.props._key,
+				date: this.props.date
 			}
 			this.props.updateAction(action);
 		}
